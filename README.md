@@ -1,31 +1,49 @@
-## THIS REPO IS FOR EXPERIMENTING
+# clak "sugar" language
 
-# clak programming language
+## THIS IS AN EXPERIMENT, IT'S A LEARNING PROJECT, THE SYNTAX IS STILL EVOLVING
 
-Clak is a programming language that translate directly to C. The goal is to "extend" C to keep its advantages and add a few things  like strings/dict/list, and be more readable.
+clak is an experimental "sugar" language, it's not really a programming language because it just generate C code.
 
-Aimed features:
+Parsing is done thanks to lexy, a fast parser combinator based on templates and `constexpr`, check it out! :
 
-* "medium level" types and containers:
+https://github.com/foonathan/lexy
+
+# Aimed features:
+
+* pythonic indentation
+* Compiles to C for faster compilation and compatibility with existing libraries
+* containers:
     * string
     * hashmap/dict
     * dynamic array
-    * tuples
-* Compiles to C for fast compilation time
-* pythonic indentation for readability
-* Does not necessarily emit correct C code, to simplify parsing. Clak returns C language errors as often as it can.
-* "barebone" language, features are kept to a minimum to have as much compatibility with C as possible.
-* statically typed and compiled: no garbage collection, no bytecode, no VM.
+    * tuples as struct
+    * vec2/vec3/vec4, maybe matrix and quaternion
+* "barebone" language, features are kept to a minimum to be easy to learn:
+    * no inheritance or polymorphism
+    * no generics
+    * no garbage collection
+    * no pointers
+* maybe explore more advanced features regarding safety, like escape analysis
+
+# How to use:
+
+1. `cmake .`
+2. build the parser executable
+3. write some code and launch the parser with clak_parse.py yourfile.txt
+4. run clak_ast.py to generate C code
+
+Some incomplete syntax sample:
 
 ```
 func bingbong(i: int) (float, char):
-    return (1231., 'x')
+    return 543
 
 func main()():
-    # tuple
-    tup: (char, float) = {'c', 0.}
+    # tuples
 
+    tup: (char, float) = {'c', 0.}
     # -> typedef struct {char field1; float field2;} charfloat1;
+
     # -> charfloat1 tup = {'c', 0.};
 
     tup = ('a', 3.)
@@ -47,13 +65,14 @@ func main()():
     shop[32] = 123
 
     # string (immutables?)
-    sblurg: str = "dada ofond"
+    sblourg = "dada ofond"
+    sblarg: str = "dada ofond"
     bloob = "36473dhhhdhdhsswury" # type deduction
     sub = bloob[3:6]
 
     # dict
     dic = {"765": 655}
-    book: dict(int: str)
+    book: dict(int -> str)
     book[2342] = "hobbits"
 
     # vectors
@@ -99,3 +118,4 @@ func main()():
             for i in v1..v2:
                 printf(432121)
 
+    return 0
