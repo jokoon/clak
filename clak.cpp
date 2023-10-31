@@ -1,4 +1,4 @@
-#include <cstdio>
+﻿#include <cstdio>
 #include <lexy/action/parse.hpp>
 #include <lexy/action/parse_as_tree.hpp>
 #include <lexy/action/trace.hpp>
@@ -28,7 +28,22 @@ namespace {
             static constexpr auto rule = [] {
                 auto head = dsl::ascii::alpha_underscore;
                 auto tail = dsl::ascii::alpha_digit_underscore;
-                return dsl::identifier(head, tail);
+
+                //auto kw_int = LEXY_KEYWORD("return", id);
+                //auto kw_struct = LEXY_KEYWORD("struct", id);
+                auto id = dsl::identifier(head, tail);
+
+                auto kw_return = LEXY_KEYWORD("return", id);
+                auto kw_break = LEXY_KEYWORD("break", id);
+                auto kw_continue = LEXY_KEYWORD("continue", id);
+
+                return id
+                    .reserve(kw_return, kw_break, kw_continue)
+                    //return dsl::identifier(head, tail);
+
+                        //.reserve()
+
+                    ;
             }();
         };
         struct string_literal {
@@ -184,10 +199,10 @@ namespace {
             struct equal : dsl::infix_op_left {
                 static constexpr auto op =
                     dsl::op(LEXY_LIT("=")) /
-                        dsl::op(LEXY_LIT("*=")) / dsl::op(LEXY_LIT("/=")) / dsl::op(LEXY_LIT("%=")) /
-                        dsl::op(LEXY_LIT("+=")) / dsl::op(LEXY_LIT("-=")) /
-                        dsl::op(LEXY_LIT(">>=")) / dsl::op(LEXY_LIT("<<=")) /
-                        dsl::op(LEXY_LIT("&=")) / dsl::op(LEXY_LIT("|=")) / dsl::op(LEXY_LIT("^="))
+                    dsl::op(LEXY_LIT("*=")) / dsl::op(LEXY_LIT("/=")) / dsl::op(LEXY_LIT("%=")) /
+                    dsl::op(LEXY_LIT("+=")) / dsl::op(LEXY_LIT("-=")) /
+                    dsl::op(LEXY_LIT(">>=")) / dsl::op(LEXY_LIT("<<=")) /
+                    dsl::op(LEXY_LIT("&=")) / dsl::op(LEXY_LIT("|=")) / dsl::op(LEXY_LIT("^="))
                     ;
 
                 using operand = bool_or;
@@ -236,33 +251,155 @@ namespace {
         };
 
         struct continue_stmt {
-            static constexpr auto rule =
-                LEXY_LIT("continue") >> LEXY_LIT("__ENDLINE__");
+            static constexpr auto rule = LEXY_LIT("continue")
+                >> LEXY_LIT("__ENDLINE__")
+                ;
         };
 
         struct break_stmt {
-            static constexpr auto rule =
-                LEXY_LIT("break") >> LEXY_LIT("__ENDLINE__");
+            static constexpr auto rule = LEXY_LIT("break")
+                >> LEXY_LIT("__ENDLINE__")
+                ;
         };
 
         struct return_stmt {
             static constexpr auto rule =
-                LEXY_LIT("return") >> LEXY_LIT("__ENDLINE__");
+                LEXY_LIT("return")
+                >> LEXY_LIT("__ENDLINE__")
+                ;
         };
 
+        //struct empty_expr {
+        //    static constexpr auto rule =
+        //        dsl::if_(dsl::p<expression>)
+        //        >>
+        //        dsl::nullopt
+        //        ;
+        //};
+
         struct return_stmt_value {
+            //static constexpr auto rule = [] {
+            //    auto expr = dsl::p<expression>;
+            //    return
+            //        LEXY_LIT("return")
+            //        >> dsl::if_(expr)
+            //        //>> dsl::p<expression>
+            //        //>> dsl::if_(dsl::p<expression>);
+            //        ;
+            //        //+ LEXY_LIT("__ENDLINE__");
+            //}();
+
             static constexpr auto rule =
                 LEXY_LIT("return")
-                >> dsl::p<expression>
-                +LEXY_LIT("__ENDLINE__");
+                //+ dsl::opt(dsl::else_ >> dsl::p<expression>)
+                //+ dsl::opt(dsl::p<expression>)
+                //+ dsl::opt(dsl::p<expression>)
+                //+ dsl::p<expression>
+                //+ LEXY_LIT("__ENDLINE__");
+                //+ LEXY_LIT("__ENDLINE__");
+                >> (
+                    LEXY_LIT("__ENDLINE__")
+                    | dsl::else_ >> dsl::p<expression> +LEXY_LIT("__ENDLINE__")
+
+                    )
+                //>> dsl::if_(dsl::p<expression>);
+                //>> dsl::if_(expression);
+                //+ LEXY_LIT("__ENDLINE__"); 
+                //+dsl::opt(dsl::p<expression>)
+                //static constexpr auto rule = [] {
+                ;
+            //{
+            //auto maybe_expr = dsl::try_(dsl::p<expression>);
+            //return
+        //+maybe_expr
+                // + dsl::p<expression>)
+                // >> dsl::p<expression>
+                //+ dsl::opt(dsl::else_ >> dsl::p<expression>)
+        //}();
         };
+#if 0
+
+        struct return_stmt_expr : lexy::expression_production {
+            struct expected_operand { static constexpr auto name = "expected operand"; };
+
+            struct return_expr : dsl::postfix_op {
+                static constexpr auto op =
+                    dsl::op(dsl::p<struct expression>);
+                //dsl::op<>(
+                //dsl::op<expression>();
+                //dsl::p<struct expression>);
+            //dsl::parenthesized.list(dsl::p<struct expression>, dsl::sep(dsl::comma)));
+                using operand = dsl::atom;
+            };
+            static constexpr auto atom =
+                LEXY_LIT("return")
+                //>> dsl::p<expression>
+                >> LEXY_LIT("__ENDLINE__");
+            using operation = return_expr;
+        };
+#endif
+        // ██████████████████████████████████████████
+        constexpr auto identifier2 = dsl::identifier(dsl::ascii::alpha);
+        struct base_type {
+            static constexpr auto rule = [] { return
+                dsl::capture(LEXY_KEYWORD("char", identifier2))
+                | dsl::capture(LEXY_KEYWORD("int", identifier2))
+                | dsl::capture(LEXY_KEYWORD("float", identifier2));
+            }();
+        };
+        
+        struct return_values { // example: (char, int, float)
+            //static constexpr auto whitespace = dsl::ascii::blank;
+            static constexpr auto rule = dsl::parenthesized.list(
+                dsl::p<base_type>, dsl::sep(dsl::comma));
+        };
+        
+        struct decl_ltr { // example: f:float
+            //static constexpr auto whitespace = dsl::ascii::blank;
+            //static constexpr auto rule = dsl::p<var_name> +LEXY_LIT(":") + dsl::p <base_type>;
+            static constexpr auto rule = 
+                dsl::p<identifier> +LEXY_LIT(":") + dsl::p <base_type>;
+        };
+
+        
+        struct func_args { // example: (f:float, c:char, i: int)
+            static constexpr auto rule = dsl::parenthesized.list(
+                dsl::p<decl_ltr>, dsl::sep(dsl::comma));
+        };
+
+        struct func_signature {
+            //static constexpr auto whitespace = dsl::ascii::blank;
+            static constexpr auto whitespace = dsl::ascii::space;
+
+            static constexpr auto rule =
+                LEXY_LIT("func")
+                + dsl::p<identifier>
+                +dsl::p<func_args>
+                //+ LEXY_LIT("->")
+                +dsl::p<return_values>
+                ;
+        };
+
+        struct func_decl {
+            static constexpr auto whitespace = dsl::ascii::space;
+            static constexpr auto rule =
+                dsl::p<func_signature> +LEXY_LIT(":") + dsl::p<compound_stmt>;
+
+        };
+
+        // ██████████████████████████████████████████
+
 
         struct jump_stmt {
             static constexpr auto rule =
                 dsl::p<continue_stmt>
                 | dsl::p<break_stmt>
-                | dsl::p<return_stmt>
-                | dsl::p<return_stmt_value>;
+                //| dsl::p<return_stmt>
+                | dsl::p<return_stmt_value>
+                //| dsl::p<return_stmt_expr>
+                //| dsl::error<expected_operand>
+                //>> LEXY_LIT("__ENDLINE__")
+                ;
         };
 
         // struct assignment_operator {
@@ -277,7 +414,7 @@ namespace {
 
         struct expression_stmt {
             static constexpr auto rule =
-            dsl::p<expression> + LEXY_LIT("__ENDLINE__");
+                dsl::p<expression> +LEXY_LIT("__ENDLINE__");
         };
 
         struct statement {
@@ -288,7 +425,8 @@ namespace {
                 | dsl::p<while_stmt>
                 | dsl::p<for_stmt>
                 | dsl::p<jump_stmt>
-                | dsl::else_>> dsl::p<expression_stmt>;
+                | dsl::else_ >> dsl::p<expression_stmt>
+                //| dsl::p<expression_stmt>
                 ;
         };
     }
@@ -325,8 +463,8 @@ int main(int n, char* argv[])
     lexy::buffer<lexy::utf8_encoding> input(indentized);
     lexy::parse_tree_for<decltype(input)> tree;
 
-
-    lexy::parse_as_tree<grammar_clak::statement>(tree, input, lexy_ext::report_error);
+    //lexy::parse_as_tree<grammar_clak::compound_stmt>(tree, input, lexy_ext::report_error);
+    lexy::parse_as_tree<grammar_clak::func_decl>(tree, input, lexy_ext::report_error);
 
     // 3 different output formats
     std::ofstream of_json("parse_tree.nogit.json");
@@ -337,7 +475,7 @@ int main(int n, char* argv[])
     std::string str_for_fancy;
     std::string str_for_trace;
 
-    lexy::trace_to<grammar_clak::statement>(
+    lexy::trace_to<grammar_clak::compound_stmt>(
         std::back_inserter(str_for_trace), input
         // {lexy::visualize_fancy }
         );
@@ -403,18 +541,18 @@ int main(int n, char* argv[])
             if (
                 !node.is_last_child()
                 && (s[0] == ' '
-                || s[0] == '\\'
-                || s[0] == '\n'
-                || s == "__INDENT__"
-                || s == "__ENDLINE__"
-                || s == "__DEDENT__"
-                || s == ":"
-                // || s== "\n"
-                // || s== " "
-                || s == ","
-                || s == "("
-                || s == ")"
-                )) break;
+                    || s[0] == '\\'
+                    || s[0] == '\n'
+                    || s == "__INDENT__"
+                    || s == "__ENDLINE__"
+                    || s == "__DEDENT__"
+                    || s == ":"
+                    // || s== "\n"
+                    // || s== " "
+                    || s == ","
+                    || s == "("
+                    || s == ")"
+                    )) break;
             of_raw << "leaf:" << s << std::endl;
             of_json << spaces(indent)
                 << ("\"" + s + comma_or_not)
