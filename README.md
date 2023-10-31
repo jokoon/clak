@@ -29,10 +29,43 @@ https://github.com/foonathan/lexy
 
 1. `cmake .`
 2. build the parser executable
-3. write some code and launch the parser with clak_parse.py yourfile.txt
-4. run clak_ast.py to generate C code
+3. either edit the code inside 'clak_ast.py' or run `python clak_ast.py yourfile.txt` to generate C code
 
-Some incomplete syntax sample:
+For now, here is some working example of translation:
+
+Here is what it does, for now. As you can see the function prototype isn't finished, and many other things aren't there, like struct declarations.
+
+#### clak source:
+```
+func sunrungunbunpunfunjunction(roubidou:char, i: int) (float, char):
+    if nope:
+        hum = cally(1,2)
+        duh = (43, fcall(2.4,(abc, 5)))
+    while 1:
+        continue
+        return
+        return 32-2*4%3
+```
+
+#### resulting C:
+```
+sunrungunbunpunfunjunctionroubidou char;i int;{
+  if(nope) {
+    hum=cally(1, 2);
+    duh=(43, fcall(2.4, (abc, 5)));
+  }
+  while(1) {
+    continue;
+    return;
+    return 32-2*4%3;
+  }
+}
+
+```
+
+You can see the resulting ast in the json file.
+
+Some incomplete syntax goal:
 
 ```
 func bingbong(i: int) (float, char):

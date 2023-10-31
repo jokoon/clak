@@ -1,0 +1,320 @@
+{
+ "func_decl": [
+  {
+   "func_signature": [
+    "func",
+    {
+     "identifier": [
+      "sunrungunbunpunfunjunction"
+     ]
+    },
+    {
+     "func_args": [
+      {
+       "decl_ltr": [
+        {
+         "identifier": [
+          "roubidou"
+         ]
+        },
+        {
+         "base_type": [
+          "char"
+         ]
+        }
+       ]
+      },
+      {
+       "decl_ltr": [
+        {
+         "identifier": [
+          "i"
+         ]
+        },
+        {
+         "base_type": [
+          "int"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "return_values": [
+      {
+       "base_type": [
+        "float"
+       ]
+      },
+      {
+       "base_type": [
+        "char"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "compound_stmt": [
+    {
+     "statement": [
+      {
+       "if_stmt": [
+        "if",
+        {
+         "expression": [
+          {
+           "identifier": [
+            "nope"
+           ]
+          }
+         ]
+        },
+        {
+         "compound_stmt": [
+          {
+           "statement": [
+            {
+             "expression_stmt": [
+              {
+               "expression": [
+                {
+                 "expression::equal": [
+                  {
+                   "identifier": [
+                    "hum"
+                   ]
+                  },
+                  "=",
+                  {
+                   "expression::call": [
+                    {
+                     "identifier": [
+                      "cally"
+                     ]
+                    },
+                    {
+                     "expression": [
+                      {
+                       "number": [
+                        "1"
+                       ]
+                      }
+                     ]
+                    },
+                    {
+                     "expression": [
+                      {
+                       "number": [
+                        "2"
+                       ]
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "statement": [
+            {
+             "expression_stmt": [
+              {
+               "expression": [
+                {
+                 "expression::equal": [
+                  {
+                   "identifier": [
+                    "duh"
+                   ]
+                  },
+                  "=",
+                  {
+                   "expression::paren_expr": [
+                    {
+                     "expression": [
+                      {
+                       "number": [
+                        "43"
+                       ]
+                      }
+                     ]
+                    },
+                    {
+                     "expression": [
+                      {
+                       "expression::call": [
+                        {
+                         "identifier": [
+                          "fcall"
+                         ]
+                        },
+                        {
+                         "expression": [
+                          {
+                           "number": [
+                            "2",
+                            ".",
+                            "4"
+                           ]
+                          }
+                         ]
+                        },
+                        {
+                         "expression": [
+                          {
+                           "expression::paren_expr": [
+                            {
+                             "expression": [
+                              {
+                               "identifier": [
+                                "abc"
+                               ]
+                              }
+                             ]
+                            },
+                            {
+                             "expression": [
+                              {
+                               "number": [
+                                "5"
+                               ]
+                              }
+                             ]
+                            }
+                           ]
+                          }
+                         ]
+                        }
+                       ]
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "statement": [
+      {
+       "while_stmt": [
+        "while",
+        {
+         "expression": [
+          {
+           "number": [
+            "1"
+           ]
+          }
+         ]
+        },
+        {
+         "compound_stmt": [
+          {
+           "statement": [
+            {
+             "jump_stmt": [
+              {
+               "continue_stmt": [
+                "continue"
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "statement": [
+            {
+             "jump_stmt": [
+              {
+               "return_stmt_value": [
+                "return"
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "statement": [
+            {
+             "jump_stmt": [
+              {
+               "return_stmt_value": [
+                "return",
+                {
+                 "expression": [
+                  {
+                   "expression::sum": [
+                    {
+                     "number": [
+                      "32"
+                     ]
+                    },
+                    "-",
+                    {
+                     "expression::product": [
+                      {
+                       "expression::product": [
+                        {
+                         "number": [
+                          "2"
+                         ]
+                        },
+                        "*",
+                        {
+                         "number": [
+                          "4"
+                         ]
+                        }
+                       ]
+                      },
+                      "%",
+                      {
+                       "number": [
+                        "3"
+                       ]
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
